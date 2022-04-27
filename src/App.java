@@ -4,13 +4,14 @@ public class App {
 
     public static void main(String[] args){
 
+        //setup variables objet
         Scanner scanner = new Scanner(System.in);
         Cuisine cuisine = new Cuisine(scanner);
         PriseCommande priseCommande = new PriseCommande(scanner);
+        Monitoring monitoring = new Monitoring(scanner);
         Bar bar = new Bar(scanner);
 
         while(true) {
-
             System.out.println();
             System.out.println("----Quel écran souhaitez vous afficher?----");
             System.out.println("1- Ecran prise de commande");
@@ -26,6 +27,7 @@ public class App {
 
             switch (choixEcran) {
                 case 1:
+                    int waiterId = priseCommande.checkIfWaiterAvailable(monitoring);
                     int peopleNumber = priseCommande.getPeopleNumber();
                     List <String> drinkList = priseCommande.getDrink(peopleNumber);
                     bar.addOrders(drinkList);
@@ -36,26 +38,22 @@ public class App {
 
                 case 2:
                     cuisine.printOrders();
+                    if(cuisine.needToRemoveOrder()){
+                        cuisine.removeOrder();
+                    }
                     break;
 
                 case 3:
                     bar.printOrders();
-                    String choixDelete = scanner.next();
 
-                    switch(choixDelete){
-                        case "o":
-                            bar.removeOrder(bar.commandesBar);
-                            break;
-
-                        case "n":
-
-                            break;
-
+                    if(bar.needToRemoveOrder()){
+                        bar.removeOrder();
                     }
+
                     break;
 
                 case 4:
-                    //
+                    monitoring.updateStock();
                     break;
 
                 case 5:

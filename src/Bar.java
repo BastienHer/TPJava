@@ -2,22 +2,32 @@ import java.util.*;
 
 public class Bar {
 
-    public List <Commande> commandesBar;
+    public List <String> commandesBar;
     private Scanner scanner;
 
     public Bar(Scanner scanner){
         this.scanner = scanner;
     }
 
-    public void addOrders(List <Commande> liste){
+    public void addOrders(List <String> liste){
         this.commandesBar = liste;
     }
 
-    public void removeOrder(List <String> liste){
+    public void removeOrder(){
         System.out.println("Veuillez rentrer l'index du produit à supprimmer");
         int id = this.scanner.nextInt();
-        liste.remove(id); //remove PriseCommande
-        this.commandesBar.remove(id); //remove commandeBar
+        this.commandesBar.remove(id);
+    }
+
+    public boolean needToRemoveOrder(){
+        System.out.println("Voulez-vous retirer une commande à la liste des commandes ? (n/y)");
+        String myChar = this.scanner.next();
+
+        while (myChar != "n" | myChar != "N" | myChar != "Y" | myChar != "y"){
+            myChar = this.scanner.next();
+        }
+
+        return !(myChar == "n" | myChar == "N");
     }
 
     public void printOrders(){

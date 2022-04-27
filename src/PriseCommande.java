@@ -1,3 +1,4 @@
+import javax.management.monitor.Monitor;
 import java.util.*;
 
 public class PriseCommande{
@@ -6,6 +7,18 @@ public class PriseCommande{
 
     public PriseCommande(Scanner scanner){
         this.scanner = scanner;
+    }
+
+    public int checkIfWaiterAvailable(Monitoring monitoring){ //returns -1 if no waiter available and waiter's id if available
+        boolean tmp = false;
+        int id;
+        for (id = 0; id < monitoring.waiterList.size(); id++){
+            if (monitoring.waiterList.get(id).isAvailable){
+                monitoring.waiterList.get(id).isAvailable = false;
+                return id;
+            }
+        }
+        return -1;
     }
 
     public int getPeopleNumber(){
@@ -17,7 +30,6 @@ public class PriseCommande{
 
     public List <String> getDrink(int peopleNumber){
         List <String> drinkList = new ArrayList<>();
-
 
         for(int i = 0; i < peopleNumber ; i++){
             System.out.println("Sélectionner la boisson n°" + i);
