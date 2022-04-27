@@ -23,16 +23,23 @@ public class App {
 
 
             int choixEcran = scanner.nextInt();
-            System.out.println("Vous avez choisi l'écran: " + choixEcran);
 
             switch (choixEcran) {
                 case 1:
                     int waiterId = priseCommande.checkIfWaiterAvailable(monitoring);
-                    int peopleNumber = priseCommande.getPeopleNumber();
-                    List <String> drinkList = priseCommande.getDrink(peopleNumber);
-                    bar.addOrders(drinkList);
-                    List <String> foodList = priseCommande.getFood(peopleNumber);
-                    cuisine.addOrders(foodList);
+                    System.out.println("C LA " + waiterId);
+
+                    if (waiterId != -1) { //si un serveur est dispo, on prend la commande
+                        Waiter waiter = monitoring.waiterList.get(waiterId);
+                        priseCommande.getOrderId(waiter); //creates file commandes.txt
+                        int peopleNumber = priseCommande.getPeopleNumber();
+                        List <String> drinkList = priseCommande.getDrink(peopleNumber);
+                        bar.addOrders(drinkList);
+                        List <String> foodList = priseCommande.getFood(peopleNumber);
+                        cuisine.addOrders(foodList);
+                        priseCommande.addOrderToFile(waiter,foodList,drinkList);
+                    }
+                    else System.out.println("Il n'y a pas de serveur disponible, veuillez en ajouter via le menu monitoring");
 
                     break;
 
@@ -53,7 +60,24 @@ public class App {
                     break;
 
                 case 4:
-                    monitoring.updateStock();
+                    System.out.println();
+                    System.out.println("----Quelle action voulez-vous effectuer ?----");
+                    System.out.println("1- Ajouter un serveur");
+                    System.out.println("2- Consulter/Actualiser le stock");
+                    System.out.println();
+
+                    int choixAction = scanner.nextInt();
+                    switch(choixAction){
+                        case 1 -> {
+                            monitoring.addWaiter();
+                            break;
+                        }
+
+                        case 2 -> {
+                            monitoring.updateStock();
+                            break;
+                        }
+                    }
                     break;
 
                 case 5:

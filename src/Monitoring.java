@@ -114,12 +114,14 @@ public class Monitoring {
 
     public void addWaiter(){
         Waiter newWaiter = new Waiter();
-        newWaiter.id = waiterList.size()+1;
+
+        newWaiter.id = waiterList.size();
 
         System.out.println("Quel est le nom du serveur");
         newWaiter.name = this.scanner.next();
 
         System.out.print("Le serveur s'appelle " + newWaiter.name + ", son id est " + newWaiter.id);
+        System.out.println("");
         this.waiterList.add(newWaiter);
     }
 }

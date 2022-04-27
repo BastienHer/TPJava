@@ -1,16 +1,18 @@
 import javax.management.monitor.Monitor;
+import java.io.*;
 import java.util.*;
+import static java.lang.Integer.parseInt;
 
 public class PriseCommande{
 
     private Scanner scanner;
+    File orderFile = new File("commandes.txt");
 
     public PriseCommande(Scanner scanner){
         this.scanner = scanner;
     }
 
     public int checkIfWaiterAvailable(Monitoring monitoring){ //returns -1 if no waiter available and waiter's id if available
-        boolean tmp = false;
         int id;
         for (id = 0; id < monitoring.waiterList.size(); id++){
             if (monitoring.waiterList.get(id).isAvailable){
@@ -19,6 +21,41 @@ public class PriseCommande{
             }
         }
         return -1;
+    }
+
+    public int getOrderId(Waiter waiter) { //return order id ( previous order's id + 1 )
+        int id = 0;
+        try {
+            if (orderFile.createNewFile()) { //creates files if does not exist
+                System.out.println("Fichier commandes.txt initialisé !");
+                System.out.println("");
+            }
+
+            else { //file already exists
+                System.out.println("Ouverture du fichier commandes.txt");
+                System.out.println("");
+                Scanner myReader = new Scanner(orderFile);
+
+                while (myReader.hasNextLine()) {
+                    String data = myReader.nextLine();
+                    if(data.startsWith("##")){
+                        String idString = String.valueOf(data.charAt(2));
+                        if (data.length() == 4) idString += String.valueOf(data.charAt(3));
+                        if (data.length() == 5) idString += String.valueOf(data.charAt(4));
+                        System.out.println("LA STRING " + idString);
+                        id = Integer.parseInt(idString);
+                        System.out.println("LE INT " + id);
+                    }
+                }
+                myReader.close();
+            }
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        waiter.commandeId = id+1;
+        return id+1;
     }
 
     public int getPeopleNumber(){
@@ -57,7 +94,7 @@ public class PriseCommande{
         List <String> foodList = new ArrayList<>();
 
         for(int i = 0; i < peopleNumber ; i++){
-            System.out.println("Sélectionner le type de plat n°" + i);
+            System.out.println("Sélectionner le type de plat n°" + i+1);
             System.out.println("1- Salades");
             System.out.println("2- Potages");
             System.out.println("3- Burgers");
@@ -123,6 +160,34 @@ public class PriseCommande{
             }
         }
         return foodList;
+    }
+
+    public void addOrderToFile(Waiter waiter, List <String> foodlist, List <String> drinkList){
+        try {
+            if (orderFile.createNewFile()) { //creates files if does not exist
+                System.out.println("Fichier commandes.txt initialisé !");
+            }
+
+            else { //file already exists
+                System.out.println("Ouverture du fichier commandes.txt");
+                PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter("commandes.txt", true)));
+
+                writer.println("##" + getOrderId(waiter));
+                writer.println(foodlist);
+                writer.println(drinkList);
+                writer.println("");
+
+                writer.close();
+
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public int getTotalOrderPrice(Waiter waiter){
+
+        return 0;
     }
 
 
