@@ -10,6 +10,7 @@ public class Bar {
     }
 
     public void addOrders(List <String> liste){
+
         this.commandesBar = liste;
     }
 
@@ -23,15 +24,14 @@ public class Bar {
         System.out.println("Voulez-vous retirer une commande à la liste des commandes ? (n/y)");
         String myChar = this.scanner.next();
 
-        while (myChar != "n" | myChar != "N" | myChar != "Y" | myChar != "y"){
+        while (myChar.equalsIgnoreCase("y") || myChar.equalsIgnoreCase("n")){
             myChar = this.scanner.next();
         }
 
-        return !(myChar == "n" | myChar == "N");
+        return myChar.equalsIgnoreCase("y");
     }
 
     public void printOrders(){
-
         for (int i = 0 ; i < this.commandesBar.size() ; i++){
             System.out.println("Boisson n°" + i + " : " + this.commandesBar.get(i));
         }

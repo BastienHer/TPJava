@@ -9,7 +9,6 @@ public class Monitoring {
     public List <String> stockList = new ArrayList<>();
     public String[] stockListName = {"Salade","Tomates","Oignons", "Champignons", "Pains Burger", "Steak", "Pâte à pizza", "Fromage", "Saucisse"};
     public int[] stockListNumber = {0,0,0,0,0,0,0,0,0};
-    public boolean serviceStarted = false;
     File stockFile = new File("stock.txt");
 
     private Scanner scanner;
@@ -19,6 +18,7 @@ public class Monitoring {
     }
 
     public void updateStockString(){
+        this.stockList.removeAll(stockList);
         this.stockList.add("Salade " + stockListNumber[0]);
         this.stockList.add("Tomates " + stockListNumber[1]);
         this.stockList.add("Oignons " + stockListNumber[2]);
@@ -30,6 +30,7 @@ public class Monitoring {
         this.stockList.add("Saucisse " + stockListNumber[8]);
         System.out.println("stock : " + this.stockList);
     }
+
 
     public void updateStock(){
         try {

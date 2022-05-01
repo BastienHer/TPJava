@@ -6,7 +6,7 @@ import static java.lang.Integer.parseInt;
 public class PriseCommande{
 
     private Scanner scanner;
-    File orderFile = new File("commandes.txt");
+    public File orderFile = new File("commandes.txt");
 
     public PriseCommande(Scanner scanner){
         this.scanner = scanner;
@@ -27,11 +27,13 @@ public class PriseCommande{
         int id = 0;
         try {
             if (orderFile.createNewFile()) { //creates files if does not exist
+                System.out.println("");
                 System.out.println("Fichier commandes.txt initialisé !");
                 System.out.println("");
             }
 
             else { //file already exists
+                System.out.println("");
                 System.out.println("Ouverture du fichier commandes.txt");
                 System.out.println("");
                 Scanner myReader = new Scanner(orderFile);
@@ -40,11 +42,9 @@ public class PriseCommande{
                     String data = myReader.nextLine();
                     if(data.startsWith("##")){
                         String idString = String.valueOf(data.charAt(2));
-                        if (data.length() == 4) idString += String.valueOf(data.charAt(3));
-                        if (data.length() == 5) idString += String.valueOf(data.charAt(4));
-                        System.out.println("LA STRING " + idString);
+                        if (data.length() == 4) idString += String.valueOf(data.charAt(3));// si l'id est supérieur à 9
+                        if (data.length() == 5) idString += String.valueOf(data.charAt(4)); //si l'id est supérieur à 99
                         id = Integer.parseInt(idString);
-                        System.out.println("LE INT " + id);
                     }
                 }
                 myReader.close();
@@ -185,7 +185,52 @@ public class PriseCommande{
         }
     }
 
+    public int askWhichOrderPay(Monitoring monitoring){
+        System.out.println("Quelle commande voulez-vous payer ?");
+
+        for (int i = 0 ; i < monitoring.waiterList.size(); i++){
+            if (!monitoring.waiterList.get(i).isAvailable) {
+                System.out.println(i + "-Commande " + monitoring.waiterList.get(i).commandeId + " de " + monitoring.waiterList.get(i));
+            }
+        }
+
+        int answer = scanner.nextInt();
+        for (int i = 0 ; i < monitoring.waiterList.size(); i++){
+            if( answer == i ) return monitoring.waiterList.get(i).commandeId;
+        }
+        return -1;
+    }
+
     public int getTotalOrderPrice(Waiter waiter){
+        StringBuilder order = new StringBuilder();
+        int totalPrice = 0;
+        try{
+                System.out.println("");
+                System.out.println("Ouverture du fichier commandes.txt");
+                System.out.println("");
+                Scanner myReader = new Scanner(orderFile);
+                boolean exit = false;
+
+                while (myReader.hasNextLine() && exit) {
+                    String data = myReader.nextLine();
+
+                    boolean executeLoop = false;
+
+                    if(data.startsWith("##" + String.valueOf(waiter.commandeId)) && !executeLoop){
+                        executeLoop = true;
+                    }
+
+                    if (executeLoop && data.startsWith("[")){
+                        order.append(data);
+                    }
+                }
+                myReader.close();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println(order);
 
         return 0;
     }

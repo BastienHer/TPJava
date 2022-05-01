@@ -18,16 +18,17 @@ public class App {
             System.out.println("2- Ecran cuisine");
             System.out.println("3- Ecran bar");
             System.out.println("4- Ecran Monitoring");
-            System.out.println("5- Fin du programme");
+            System.out.println("5- Régler une commande");
+            System.out.println("6- Fin du programme");
             System.out.println();
 
 
             int choixEcran = scanner.nextInt();
+            int waiterId = -1;
 
             switch (choixEcran) {
                 case 1:
-                    int waiterId = priseCommande.checkIfWaiterAvailable(monitoring);
-                    System.out.println("C LA " + waiterId);
+                    waiterId = priseCommande.checkIfWaiterAvailable(monitoring);
 
                     if (waiterId != -1) { //si un serveur est dispo, on prend la commande
                         Waiter waiter = monitoring.waiterList.get(waiterId);
@@ -47,6 +48,7 @@ public class App {
                     cuisine.printOrders();
                     if(cuisine.needToRemoveOrder()){
                         cuisine.removeOrder();
+
                     }
                     break;
 
@@ -70,17 +72,21 @@ public class App {
                     switch(choixAction){
                         case 1 -> {
                             monitoring.addWaiter();
-                            break;
                         }
 
                         case 2 -> {
                             monitoring.updateStock();
-                            break;
                         }
                     }
                     break;
 
                 case 5:
+                    priseCommande.askWhichOrderPay(monitoring);
+                    Waiter waiter = monitoring.waiterList.get(waiterId);
+                    priseCommande.getTotalOrderPrice(waiter);
+                    break;
+
+                case 6:
                     return;
             }
         }
