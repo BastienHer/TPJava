@@ -10,6 +10,7 @@ public class App {
         PriseCommande priseCommande = new PriseCommande(scanner);
         Monitoring monitoring = new Monitoring(scanner);
         Bar bar = new Bar(scanner);
+        int waiterId = -1;
 
         while(true) {
             System.out.println();
@@ -24,7 +25,7 @@ public class App {
 
 
             int choixEcran = scanner.nextInt();
-            int waiterId = -1;
+
 
             switch (choixEcran) {
                 case 1:
@@ -48,7 +49,6 @@ public class App {
                     cuisine.printOrders();
                     if(cuisine.needToRemoveOrder()){
                         cuisine.removeOrder();
-
                     }
                     break;
 

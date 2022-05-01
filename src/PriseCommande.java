@@ -167,19 +167,22 @@ public class PriseCommande{
             if (orderFile.createNewFile()) { //creates files if does not exist
                 System.out.println("Fichier commandes.txt initialisé !");
             }
+            //écriture dans le fichier commandes
+            System.out.println("Ouverture du fichier commandes.txt");
+            PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter("commandes.txt", true)));
 
-            else { //file already exists
-                System.out.println("Ouverture du fichier commandes.txt");
-                PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter("commandes.txt", true)));
+            writer.println("##" + getOrderId(waiter));
 
-                writer.println("##" + getOrderId(waiter));
-                writer.println(foodlist);
-                writer.println(drinkList);
-                writer.println("");
-
-                writer.close();
+            for (int i = 0 ; i < foodlist.size(); i++){
+                writer.println(foodlist.get(i));
 
             }
+            for (int i = 0 ; i < foodlist.size(); i++){
+                writer.println(drinkList.get(i));
+            }
+            writer.println("");
+            writer.close();
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -119,6 +119,7 @@ public class Monitoring {
         newWaiter.id = waiterList.size();
 
         System.out.println("Quel est le nom du serveur");
+        scanner.useDelimiter("\n"); //nom et prénom possible
         newWaiter.name = this.scanner.next();
 
         System.out.print("Le serveur s'appelle " + newWaiter.name + ", son id est " + newWaiter.id);
