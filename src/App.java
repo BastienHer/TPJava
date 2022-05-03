@@ -23,9 +23,7 @@ public class App {
             System.out.println("6- Fin du programme");
             System.out.println();
 
-
             int choixEcran = scanner.nextInt();
-
 
             switch (choixEcran) {
                 case 1:

@@ -76,6 +76,7 @@ public class Monitoring {
             System.out.println("7- Fromage");
             System.out.println("8- Saucisse");
             System.out.println("9- Sortie");
+            System.out.println("10 - Auto Setup de tous les ingrédients à 20");
 
             int tmp = this.scanner.nextInt();
             while (tmp != 9){
@@ -83,8 +84,16 @@ public class Monitoring {
                     System.out.println("Veuillez rentrer la valeur souhaitée de " + this.stockListName[tmp]);
                     int tmp2 = this.scanner.nextInt();
                     this.stockListNumber[tmp] = tmp2;
-                    updateStockString();
-                    updateStockFile();
+                }
+                updateStockString();
+                updateStockFile();
+
+                if (tmp == 10) { //autoSetup des ingrédients à 10
+                    for (int i = 0 ; i < this.stockListNumber.length ; i++){
+                        this.stockListNumber[i] = 20;
+                        updateStockString();
+                        updateStockFile();
+                    }
                 }
                 System.out.println("De quel ingrédient voulez-vous modifier le stock ?");
                 System.out.println("0- Salade");
@@ -112,6 +121,7 @@ public class Monitoring {
             e.printStackTrace();
         }
     }
+
 
     public void addWaiter(){
         Waiter newWaiter = new Waiter();

@@ -7,12 +7,13 @@ public class PriseCommande{
 
     private Scanner scanner;
     public File orderFile = new File("commandes.txt");
+    public File orderRemainingFile = new File("commandesRestantes.txt");
 
     public PriseCommande(Scanner scanner){
         this.scanner = scanner;
-    }
+    } //constructeur
 
-    public int checkIfWaiterAvailable(Monitoring monitoring){ //returns -1 if no waiter available and waiter's id if available
+    public int checkIfWaiterAvailable(Monitoring monitoring){ //retourne l'id du server ou -1 si personne n'est disponible
         int id;
         for (id = 0; id < monitoring.waiterList.size(); id++){
             if (monitoring.waiterList.get(id).isAvailable){
@@ -23,7 +24,7 @@ public class PriseCommande{
         return -1;
     }
 
-    public int getOrderId(Waiter waiter) { //return order id ( previous order's id + 1 )
+    public int getOrderId(Waiter waiter) { //retourne l'id de la commande (idCommandePrécédente + 1)
         int id = 0;
         try {
             if (orderFile.createNewFile()) { //creates files if does not exist
@@ -58,7 +59,7 @@ public class PriseCommande{
         return id+1;
     }
 
-    public int getPeopleNumber(){
+    public int getPeopleNumber(){ //renvoie le nombre de personne qui vont prendre un repas
         System.out.println("Combien de personnes vont prendre un repas?");
         int peopleNumber = scanner.nextInt();
         System.out.println();
@@ -163,30 +164,60 @@ public class PriseCommande{
     }
 
     public void addOrderToFile(Waiter waiter, List <String> foodlist, List <String> drinkList){
-        try {
-            if (orderFile.createNewFile()) { //creates files if does not exist
+
+        int id = getOrderId(waiter);
+
+        try { //ajout dans le fichier commandes.txt
+            if (orderFile.createNewFile()) {
                 System.out.println("Fichier commandes.txt initialisé !");
             }
             //écriture dans le fichier commandes
             System.out.println("Ouverture du fichier commandes.txt");
             PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter("commandes.txt", true)));
 
-            writer.println("##" + getOrderId(waiter));
-
+            writer.println("##" + id);
+            writer.println("[FOOD]");
             for (int i = 0 ; i < foodlist.size(); i++){
                 writer.println(foodlist.get(i));
-
             }
+            writer.print("[DRINK]");
+            for (int i = 0 ; i < foodlist.size(); i++){
+                writer.println(drinkList.get(i));
+            }
+            writer.println(" ");
+            writer.close();
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        try{ //ajout dans le fichier commandesRestantes.txt
+            if (orderRemainingFile.createNewFile()) {
+                System.out.println("Fichier commandesRestantes.txt initialisé !");
+            }
+
+            //écriture dans le fichier commandesRestantes
+            System.out.println("Ouverture du fichier commandesRestantes.txt");
+            PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter("commandesRestantes.txt", true)));
+
+            writer.println("##" + id);
+            writer.println("[FOOD]");
+            for (int i = 0 ; i < foodlist.size(); i++){
+                writer.println(foodlist.get(i));
+            }
+            writer.println("[DRINK]");
             for (int i = 0 ; i < foodlist.size(); i++){
                 writer.println(drinkList.get(i));
             }
             writer.println("");
             writer.close();
 
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
+
 
     public int askWhichOrderPay(Monitoring monitoring){
         System.out.println("Quelle commande voulez-vous payer ?");
